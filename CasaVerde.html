@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Casa Verde - Jardinagem e Paisagismo</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    
+    h1 {
+      margin-bottom: 5px;
+    }
+    
+    h2 {
+      font-size: 12px;
+      margin-top: 5px;
+      color: #888;
+    }
+    
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 20px;
+    }
+    
+    th, td {
+      padding: 8px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
+    
+    th {
+      background-color: #f2f2f2;
+    }
+    
+    tr:hover {
+      background-color: #f5f5f5;
+    }
+    
+    .button {
+      padding: 10px 20px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+    
+    .button:hover {
+      background-color: #45a049;
+    }
+    
+    .total {
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Casa Verde - Jardinagem e Paisagismo</h1>
+  <h2>CNPJ: 19.711.693/0001-59</h2>
+  
+  <table>
+    <tr>
+      <th>Produto</th>
+      <th>Quantidade</th>
+      <th>Preço</th>
+      <th>Subtotal</th>
+    </tr>
+    
+    <tr>
+      <td><input type="text" name="produto[]" /></td>
+      <td><input type="number" name="quantidade[]" /></td>
+      <td><input type="number" name="preco[]" /></td>
+      <td><span class="subtotal">0</span></td>
+    </tr>
+  </table>
+  
+  <button class="button" onclick="addRow()">+</button>
+  <button class="button" onclick="saveAsImage()">Salvar como PNG</button>
+  
+  <div class="total">
+    <h3>Total: <span id="total">0</span></h3>
+  </div>
+  
+  <script>
+    function updateSubtotal() {
+      var quantidadeInputs = document.getElementsByName("quantidade[]");
+      var precoInputs = document.getElementsByName("preco[]");
+      var subtotalSpans = document.getElementsByClassName("subtotal");
+      
+      var total = 0;
+      
+      for (var i = 0; i < quantidadeInputs.length; i++) {
+        var quantidade = parseInt(quantidadeInputs[i].value);
+        var preco = parseFloat(precoInputs[i].value);
+        
+        var subtotal = quantidade * preco;
+        total += subtotal;
+        
+        subtotalSpans[i].textContent = subtotal.toFixed(2);
+      }
+      
+      document.getElementById("total").textContent = total.toFixed(2);
+    }
+    
+    function addRow() {
+      var table = document.querySelector("table");
+      
+      var newRow = document.createElement("tr");
+      newRow.innerHTML = `
+        <td><input type="text" name="produto[]" /></td>
+        <td><input type="number" name="quantidade[]" /></td>
+        <td><input type="number" name="preco[]" /></td>
+        <td><span class="subtotal">0</span></td>
+      `;
+      
+      table.appendChild(newRow);
+    }
+    
+    function saveAsImage() {
+      updateSubtotal();
+      
+      html2canvas(document.body).then(function(canvas) {
+        var link = document.createElement("a");
+        link.href = canvas.toDataURL();
+        link.download = "tabela.png";
+        link.click();
+      });
+    }
+  </script>
+
+  <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+</body>
+</html>
